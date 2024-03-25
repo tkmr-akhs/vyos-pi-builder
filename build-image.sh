@@ -1,10 +1,12 @@
+VYOS_VERSION=sagitta
+
 set -x
 set -e
 ROOTDIR=$(pwd)
 
 # Clean out the build-repo and copy all custom packages
 rm -rf vyos-build
-git clone http://github.com/vyos/vyos-build vyos-build
+git clone http://github.com/vyos/vyos-build vyos-build -b $VYOS_VERSION
 
 if [ ! -f build/telegraf*.deb ]; then
 	pushd vyos-build/packages/telegraf
@@ -45,10 +47,13 @@ fi
 bash build-u-boot.sh
 
 # Generate CM4 image from the iso
-DEVTREE="bcm2711-rpi-cm4" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
+#DEVTREE="bcm2711-rpi-cm4" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
+
+# Generate PI5 image from the iso
+DEVTREE="bcm2712d0-rpi-5-b" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
 
 # Generate PI4 image from the iso
-DEVTREE="bcm2711-rpi-4-b" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
+#DEVTREE="bcm2711-rpi-4-b" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
 
 # Generate PI3B image from the iso
 #DEVTREE="bcm2710-rpi-3-b" PIVERSION=3 bash build-pi-image.sh ${LIVE_IMAGE_ISO}

@@ -1,0 +1,12 @@
+diff --git a/data/build-flavors/iso.toml b/data/build-flavors/iso.toml
+index 9bf7044..12c26e5 100644
+--- a/data/build-flavors/iso.toml
++++ b/data/build-flavors/iso.toml
+@@ -6,7 +6,6 @@ image_format = "iso"
+ packages = [
+   # QEMU and Xen guest tools exist for multiple architectures
+   "qemu-guest-agent",
+-  "vyos-xe-guest-utilities",
+ ]
+ 
+ [architectures.amd64]

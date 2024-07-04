@@ -23,7 +23,7 @@ git clone -b ${KERNEL_BRANCH_NAME} ${KERNEL_REPO}
 #cp linux/arch/arm64/configs/bcm2711_defconfig arch/arm64/configs/vyos_defconfig
 cp linux/arch/arm64/configs/bcm2712_defconfig arch/arm64/configs/vyos_defconfig
 #patch -t -u arch/arm64/configs/vyos_defconfig < ${ROOTDIR}/patches/0001_bcm2711_defconfig.patch
-patch -t -u arch/arm64/configs/vyos_defconfig < ${ROOTDIR}/patches/0003_bcm2712_defconfig.patch
+#patch -t -u arch/arm64/configs/vyos_defconfig < ${ROOTDIR}/patches/0003_bcm2712_defconfig.patch
 ./build-kernel.sh
 
 git clone ${FW_REPO}
@@ -46,3 +46,4 @@ git clone --depth=1 https://github.com/OpenVPN/ovpn-dco #-b v0.2.20230426
 cd ${ROOTDIR}
 mkdir -p build
 find vyos-build/packages/linux-kernel/ -type f | grep '\.deb$' | xargs -I {} cp {} build/
+cp vyos-build/packages/linux-kernel/kernel-vars build/

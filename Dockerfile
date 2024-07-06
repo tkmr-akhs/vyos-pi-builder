@@ -14,8 +14,12 @@ RUN echo "deb-src http://deb.debian.org/debian bookworm-backports main contrib n
 RUN echo "deb http://security.debian.org/debian-security/ bookworm-security main contrib non-free" >> /etc/apt/sources.list
 RUN echo "deb-src http://security.debian.org/debian-security/ bookworm-security main contrib non-free" >> /etc/apt/sources.list
 
-RUN apt -y install gdisk
-RUN apt -y install kpartx
+RUN apt-get update
+
+RUN apt-get -y install gdisk
+RUN apt-get -y install kpartx
+RUN apt-get -y install uuid-dev
+RUN apt-get -y install gnutls-dev
 
 RUN rm -f /etc/apt/sources.list
 #RUN mv /etc/apt/sources.list.orig /etc/apt/sources.list

@@ -11,19 +11,21 @@ git clone http://github.com/vyos/vyos-build vyos-build -b $VYOS_VERSION
 
 cp build/kernel-vars vyos-build/packages/linux-kernel/
 
-#if [ ! -f build/telegraf*.deb ]; then
-#	pushd vyos-build/packages/telegraf
-#	git clone https://github.com/influxdata/telegraf.git -b v1.23.1 telegraf
-#	bash -x ./build.sh
-#	popd
-#	mkdir -p build
-#	cp vyos-build/packages/telegraf/telegraf/build/dist/telegraf_1.23.1-1_arm64.deb build/
-#fi
+if [ ! -f build/telegraf*.deb ]; then
+	pushd vyos-build/packages/telegraf
+	git clone https://github.com/influxdata/telegraf.git -b v1.23.1 telegraf
+	bash -x ./build.sh
+	popd
+	mkdir -p build
+	cp vyos-build/packages/telegraf/telegraf/build/dist/telegraf_1.23.1-1_arm64.deb build/
+fi
 
 for a in $(find build -type f -name "*.deb" | grep -v -e "-dbgsym_" -e "libnetfilter-conntrack3-dbg"); do
 	echo "Copying package: $a"
 	cp $a vyos-build/packages/
 done
+
+cp build-flavor/rpi.toml vyos-build/data/build-flavors/
 
 cd vyos-build
 
@@ -32,7 +34,7 @@ cp ${ROOTDIR}/config.boot.default data/live-build-config/includes.chroot/opt/vya
 
 # Build the image
 #./build-vyos-image iso --architecture arm64
-./build-vyos-image generic --architecture arm64
+./build-vyos-image rpi --architecture arm64
 
 
 cd $ROOTDIR

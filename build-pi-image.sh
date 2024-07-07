@@ -73,24 +73,27 @@ if ! [ -f ${ISOFILE} ]; then
 fi
 
 if [ -f "${PIVERSION}" ]; then
-	PIVERSION=4
+	PIVERSION=5
 fi
 
 if [ -f "${UBOOTBIN}" ]; then
     echo "Using uboot from ${UBOOTBIN}"
+elif [ "${PIVERSION}" == "5" ] && [ -f "u-boot-rpi4.bin" ]; then
+    echo "Using uboot from ./u-boot-rpi4.bin"
+    UBOOTBIN="u-boot-rpi4.bin"
 elif [ -f "u-boot-rpi${PIVERSION}.bin" ]; then
-    echo "Using uboot from ./u-boot.bin"
+    echo "Using uboot from ./u-boot-rpi${PIVERSION}.bin"
     UBOOTBIN="u-boot-rpi${PIVERSION}.bin"
 else
     1>&2 echo "ERROR: u-boot.bin not found and UBOOTBIN env variable is not set"
     exit 1
 fi
 
-echo "VYOS Raspberry Pi3/4 image builder"
+echo "VYOS Raspberry Pi3/4/5 image builder"
 
 # Select devtree to load, if none is spesified  pi4b devtree is used
 if [ -z "$DEVTREE" ]; then
-    DEVTREE="bcm2711-rpi-4-b"
+    DEVTREE="bcm2712-rpi-5-b"
 fi
 
 # get input and output filename
@@ -160,7 +163,11 @@ cp ${ISODIR}/live/vmlinuz-* ${BOOTDIR}/vmlinuz
 # Copy rpi firmware files
 #(CDIR=$(pwd); cd ${EFIDIR}; tar fzxv ${CDIR}/../tools/rpi4-bootfiles.tgz --owner=0 --group=0) || true
 echo "Downloading PI Boot files"
-if [ "${PIVERSION}" == "4" ]; then
+if [ "${PIVERSION}" == "5" ]; then
+    curl -s -o ${EFIDIR}/fixup4.dat https://raw.githubusercontent.com/raspberrypi/firmware/master/boot/fixup4.dat 1>&3
+    curl -s -o ${EFIDIR}/start4.elf https://raw.githubusercontent.com/raspberrypi/firmware/master/boot/start4.elf 1>&3
+    curl -s -o ${EFIDIR}/overlays/dwc2.dtbo https://raw.githubusercontent.com/raspberrypi/firmware/master/boot/overlays/dwc2.dtbo 1>&3
+elif [ "${PIVERSION}" == "4" ]; then
     curl -s -o ${EFIDIR}/fixup4.dat https://raw.githubusercontent.com/raspberrypi/firmware/master/boot/fixup4.dat 1>&3
     curl -s -o ${EFIDIR}/start4.elf https://raw.githubusercontent.com/raspberrypi/firmware/master/boot/start4.elf 1>&3
     curl -s -o ${EFIDIR}/overlays/dwc2.dtbo https://raw.githubusercontent.com/raspberrypi/firmware/master/boot/overlays/dwc2.dtbo 1>&3

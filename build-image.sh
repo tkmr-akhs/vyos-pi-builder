@@ -53,8 +53,11 @@ bash build-u-boot.sh
 # Generate CM4 image from the iso
 #DEVTREE="bcm2711-rpi-cm4" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
 
+# Generate PI5(d0) image from the iso
+#DEVTREE="bcm2712d0-rpi-5-b" PIVERSION=5 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
+
 # Generate PI5 image from the iso
-DEVTREE="bcm2712d0-rpi-5-b" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
+DEVTREE="bcm2712-rpi-5-b" PIVERSION=5 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
 
 # Generate PI4 image from the iso
 #DEVTREE="bcm2711-rpi-4-b" PIVERSION=4 bash build-pi-image.sh ${LIVE_IMAGE_ISO}
